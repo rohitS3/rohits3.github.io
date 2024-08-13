@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age and Disease Prediction by MicroCrispr</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url('https://images.pexels.com/photos/17485709/pexels-photo-17485709/free-photo-of-an-artist-s-illustration-of-artificial-intelligence-ai-this-image-visualises-the-input-and-output-of-neural-networks-and-how-ai-systems-perceive-data-it-was-created-by-rose-pilkington.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+            background-size: cover;
+            background-position: center;
+
+            background-color: #fcfefe;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            height: 100vh;
+        }
+        .container-box {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        .camera-container, .file-container, .result-container {
+            margin-top: 20px;
+        }
+        video, img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+            border-radius: 10px;
+            border: 1px solid #ced4da;
+        }
+        .message-box {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #495057;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .decision-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            display: none; /* Initially hidden */
+        }
+        .down { 
+            margin-top: 5em;
+        }
+        .fancy {
+            --offset: 3px;
+            background: rgb(244, 243, 245);
+            border-radius: 50px;
+            position: relative;
+            height: 75px;
+            width: 400px;
+            max-width: 100%;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .fancy::before { 
+            content: '';
+            background: conic-gradient(transparent 270deg, rgb(13, 13, 13), transparent);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            aspect-ratio: 1;
+            width: 100%;
+            animation: rotate 2s linear infinite;
+        }
+
+        .fancy::after {
+            content: '';
+            background: inherit;
+            border-radius: inherit;
+            position: absolute;
+            inset: var(--offset);
+            height: calc(100% - 2 * var(--offset));
+            width: calc(100% - 2 * var(--offset));
+        }
+
+        .fancy h3 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: black;
+            font-size: 1.5rem;
+            line-height: 75px;
+            font-weight: bold;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: translate(-50%, -50%) scale(1.4) rotate(0turn);
+            }
+
+            to {
+                transform: translate(-50%, -50%) scale(1.4) rotate(1turn);
+            }
+        }
+        @keyframes growshrink {
+  25%,
+  75% {
+    scale: 100%;
+  }
+
+  50% {
+    scale: 200%;
+    color: magenta;
+  }
+}
+
+
+
+@keyframes slidein {
+  from {
+    translate: 150vw 0;
+    scale: 200% 1;
+  }
+
+  to {
+    translate: 0 0;
+    scale: 100% 1;
+  }
+}
+
+@keyframes growshrink {
+  25%,
+  75% {
+    scale: 100%;
+  }
+
+  50% {
+    scale: 200%;
+    color: magenta;
+  }
+}
+.navbar {
+            background-color: transparent !important; /* Make navbar transparent */
+            padding: 0.5rem 1rem; /* Adjust padding as needed */
+        }
+        .navbar-nav .nav-link {
+            color: #ffffff; /* Change text color for better visibility */
+        }
+        .navbar-brand img {
+            height: 40px; /* Adjust image size as needed */
+            width: auto; /* Maintain aspect ratio */
+        }
+        .container-box {
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background for content */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .spacer {
+    height: 50px; /* Height of the extra space */
+}
+
+    </style>
+</head>
+<body>
+    <!-- Navbar outside the box -->
+    <nav class="navbar navbar-light bg-light w-100">
+        <a class="navbar-brand" href="#">
+            <img src="https://media.licdn.com/dms/image/D4D16AQHY-KVTD03OoA/profile-displaybackgroundimage-shrink_200_800/0/1689994883905?e=2147483647&v=beta&t=U-4rVWuoTysw3NbHqDqGjwi4l4IfyC4B-2lzre7lCaE" alt="MicroCrispr">
+        </a>
+        <div class="navbar-expand-lg navbar-light">
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item active">
+                  <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                  <a class="nav-link" href="#">Features</a>
+                </li>
+                <li class="nav-item active">
+                  <a class="nav-link bold" href="#">Pricing</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">About us</a>
+                </li>
+              </ul>
+            </div>
+        </div>
+    </nav>
+
+    </nav>
+    <div class="container down">
+        <marquee behavior="" direction=""><p class="text-center ">
+        Health is not just about what you’re eating. It’s also about what you’re thinking and saying.  What most people don’t realize is that food is not just calories: It’s information. It actually contains messages that communicate to every cell in the body.” – Dr. Mark Hyman</p></marquee>
+
+    </div> 
+
+    <!-- Box containing the rest of the content -->
+    <div class="container-box shadow down">
+        <div class="fancy">
+            <h3>Ageing And Disease Prediction</h3>
+        </div>
+
+        <div class="camera-container">
+            <h3>Capture Your Face Pic</h3>
+            <button id="startCamera" class="btn btn-primary">Start Camera</button>
+            <video id="video" autoplay style="display: none;"></video>
+            <button id="capture" class="btn btn-success" style="display: none;">Capture</button>
+            <canvas id="canvas" style="display: none;"></canvas>
+        </div>
+
+        <div class="file-container">
+            <h3>Or Choose a File</h3>
+            <input type="file" id="fileInput" accept="image/*" class="form-control-file">
+            <img id="chosenImage" style="display: none;">
+        </div>
+
+        <div class="result-container">
+            <h3 id="ageResult" style="display: none;">You Look Like: __ Age</h3>
+        </div>
+
+        <div class="btn-group">
+            <button id="isItOk" class="btn btn-success" style="display: none;">It's OK</button>
+            <button id="wrongAge" class="btn btn-warning" style="display: none;">Wrong Age</button>
+        </div>
+
+        <div class="message-box">
+            <p id="message" style="display: none;"></p>
+        </div>
+
+        <div class="decision-buttons">
+            <button id="okButton" class="btn btn-primary">OK</button>
+            <button id="cancelButton" class="btn btn-secondary">Cancel</button>
+        </div>
+    </div>
+
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="toast-header">
+    <img src="..." class="rounded mr-2" alt="...">
+    <strong class="mr-auto"></strong>
+    <small class="text-muted"></small>
+    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="toast-body">
+  </div>
+</div>
+
+    <script>
+        const startCameraBtn = document.getElementById('startCamera');
+        const video = document.getElementById('video');
+        const captureBtn = document.getElementById('capture');
+        const canvas = document.getElementById('canvas');
+        const fileInput = document.getElementById('fileInput');
+        const chosenImage = document.getElementById('chosenImage');
+        const ageResult = document.getElementById('ageResult');
+        const isItOkBtn = document.getElementById('isItOk');
+        const wrongAgeBtn = document.getElementById('wrongAge');
+        const messageBox = document.getElementById('message');
+        const decisionButtons = document.querySelector('.decision-buttons');
+        const okButton = document.getElementById('okButton');
+        const cancelButton = document.getElementById('cancelButton');
+
+        const randomAges = [24, 27, 35, 40];
+        const randomDiseases = ["Depression", "Heart Disease", "Kidney Disease"];
+
+        startCameraBtn.addEventListener('click', () => {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then((stream) => {
+                    video.srcObject = stream;
+                    video.style.display = 'block';
+                    captureBtn.style.display = 'block';
+                })
+                .catch((err) => {
+                    console.error("Error accessing camera: ", err);
+                });
+        });
+
+        captureBtn.addEventListener('click', () => {
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            video.srcObject.getTracks().forEach(track => track.stop());
+            video.style.display = 'none';
+            captureBtn.style.display = 'none';
+
+            const randomAge = randomAges[Math.floor(Math.random() * randomAges.length)];
+            ageResult.innerText = `You Look Like: ${randomAge} Years Old`;
+            ageResult.style.display = 'block';
+            isItOkBtn.style.display = 'inline-block';
+            wrongAgeBtn.style.display = 'inline-block';
+        });
+
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    chosenImage.src = e.target.result;
+                    chosenImage.style.display = 'block';
+
+                    const randomAge = randomAges[Math.floor(Math.random() * randomAges.length)];
+                    ageResult.innerText = `You Look Like: ${randomAge} Years Old`;
+                    ageResult.style.display = 'block';
+                    isItOkBtn.style.display = 'inline-block';
+                    wrongAgeBtn.style.display = 'inline-block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        isItOkBtn.addEventListener('click', () => {
+            messageBox.innerText = "We Recommend you to check Disease.";
+            messageBox.style.display = 'block';
+            decisionButtons.style.display = 'flex'; // Show the decision buttons
+        });
+
+        wrongAgeBtn.addEventListener('click', () => {
+            messageBox.innerText = "If Having Age Gap then it might be possible that your Body containing some Disease. You Wanna look into it?";
+            messageBox.style.display = 'block';
+            decisionButtons.style.display = 'flex'; // Show the decision buttons
+        });
+
+        cancelButton.addEventListener('click', () => {
+            messageBox.innerText = "Thank you!";
+            decisionButtons.style.display = 'none'; // Hide the decision buttons
+        });
+
+        okButton.addEventListener('click', () => {
+            window.location.href = "disease.html"; // Redirect to the disease prediction page
+        });
+    </script>
+</body>
+</html>
